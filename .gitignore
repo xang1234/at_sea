@@ -2,3 +2,6 @@ __pycache__/
 .ipynb_checkpoints/
 notebooks/
 creds.py
+
+data/endpoints/
+data/endpoints_ports/

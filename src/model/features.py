@@ -3,12 +3,8 @@ import argparse
 import sys
 import pandas as pd
 import numpy as np
-from ..utils import creds
-from ..utils import aws
-from ..utils import mapping
 from ..utils.calc import haversine, haversine2
-from smart_open import open
-from tqdm import tqdm as tqdm
+
 import os
 
 def get_args():
@@ -32,8 +28,15 @@ def main():
     res=pd.DataFrame()
 
     for i, f in enumerate(files):
+        transit = pd.read_csv(IN_DIR+f)
+        transit['exit_port'] = transit.apply(lambda x: get_nearest_port(x.longitude_exit, x.latitude_exit, ports),
+                                             axis=1)
+        transit['entry_port'] = transit.apply(lambda x: get_nearest_port(x.longitude_entry, x.latitude_entry, ports),
+                                              axis=1)
+        transit.to_csv('transit_' + f)
 
-        ports = pd.read_csv(IN_DIR+f)[['latitude','longitude','lrimoshipno']]
-        res = gp.clear_duplicates(pd.concat([res, ports]))
 
-    res.to_csv(OUT_DIR+'all_ports.csv')
+
+if __name__ == '__main__':
+    print(sys.argv)
+    main()
