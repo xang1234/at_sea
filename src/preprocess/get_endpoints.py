@@ -4,7 +4,6 @@ import sys
 import pandas as pd
 import numpy as np
 from ..utils import creds
-from ..utils import aws
 from ..utils import mapping
 from ..utils.calc import haversine, haversine2
 from smart_open import open

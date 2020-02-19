@@ -4,8 +4,7 @@ import os
 import pandas as pd
 import numpy as np
 
-from ..utils import mapping
-from ..utils.calc import haversine, haversine2
+
 
 import src.preprocess.get_ports as gp
 
