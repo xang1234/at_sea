@@ -25,14 +25,14 @@ Based on the analysis, we obtain some 603 ports. Some ports do not appear, this 
 
 
 <p align="center">
-<img  src="img/inferred_ports.png" width="600" height="300" >
+<img  src="img/inferred_ports.png" width="600" height="350" >
 </p>
 
 Data from [WFPGeoNode](https://geonode.wfp.org/layers/geonode:wld_trs_ports_wfp) has more than 3000 ports available. 
 It is preferable to use this external data source as port locations instead. 
 
 <p align="center">
-<img  src="img/world_ports.png" width="600" height="300" >
+<img  src="img/world_ports.png" width="600" height="350" >
 </p>
 
 
@@ -44,9 +44,10 @@ Unfortunately, insufficient time was spent on modelling so there are more ideas 
 $ sh ./bin/model.sh
 ~~~
 
-* _features_ determines the nearest WFPGeoNode port for each itinerary (departure and arrival)
-*  
+* **features** determines the nearest WFPGeoNode port for each itinerary (departure and arrival)
+* **graph** plots the graph of port connections. (Further work : graph and geographical clustering)
 *
+* 
 
 Based on the pre-processing :
 * All ships : 144k trajectories, 13634 ships and 2800 ports
@@ -56,7 +57,7 @@ Based on the pre-processing :
 Location of ports visited by ships with dwt above 150k:
 
 <p align="center">
-<img  src="img/heavy_port.png" width="600" height="300" >
+<img  src="img/heavy_port.png" width="600" height="350" >
 </p>
 
 
@@ -74,10 +75,12 @@ Assuming the pre-processing is correct, this are samples of how arrivals at port
 </p>
 
 if we naively use the 14 day average on 1st Jan 2020 to predict the number of arrivals for 2-15 Jan, we would get an accuracy
-of 48% and 91% respectively for Dampier and Port Hedland. 
+of 48% and 91% respectively for Dampier and Port Hedland. Any evaluation of the metric would obviously have to be done over a period of time, 
+preferably covering know fluctuations and spikes.
 
-while the moving average gives a certain approximation, large spikes or dips would be missed. Pure time series methods
-do not seem to be of use here to deal with the fluctuations.
+While the moving average gives a certain approximation, large spikes or dips would be missed. Pure time series methods
+do not seem to be of use here to deal with the fluctuations in arrivals, unless we know of certain causal event before hand 
+that could impact arrivals (e.g : blockade, accident, etc.) 
 
 
 ### Combining Graphs and Ship Movement Data  
@@ -96,7 +99,7 @@ like the Louvain or Leiden algorithms, we can cluster ports based on how ships t
 
 Within this graph community cluster, it would be possible to further cluster the ports geographically with algorithms like 
 k-means or DBScan. We can then obtain a 2 level hierarchical clustering based on ship itineraries and port locations. Thus, 
-knowing which port a ship departed from , it is possible to get a list of ports it is likely to visit. Used alone, it only relies on the
+knowing which port a ship departed from, it is possible to get a list of ports it is likely to visit. Used alone, it only relies on the
 last port visited and would provide many possible ports. 
 
 #### Ship Movement Data 
@@ -118,9 +121,18 @@ We could plot historical ship movement data arcs for each of the hierarchical cl
 Based on the port of departure and known travel times between the ports in the cluster, we can narrow down the list of ports that determine which geographical cluster of ports
 the ship is likeliest to visit based on it's last known position, speed and heading. 
 
+This would require that the pre-processing be revisited and the data size will increase. 
+
 
 ### Neural Networks 
 
 Deep neural networks could potentially learn the information that we are trying to synthesize by using graphs and ship movement data. 
-Of particular interest are CNN and Transformer architectures which performed well on a recent [Kaggle competition](https://www.kaggle.com/c/nfl-big-data-bowl-2020/overview)
+Of particular interest are CNN and Transformer architectures which performed well on a recent [CPU only Kaggle competition](https://www.kaggle.com/c/nfl-big-data-bowl-2020/overview)
 where initial player position, speed and other data was used to predict outcome of NFL run plays. 
+
+This solution could reduce memory load as the training would be done over epochs. 
+
+
+## Dockerized solution 
+
+Not done 
