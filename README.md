@@ -54,8 +54,9 @@ Based on the pre-processing :
 
 
 Location of ports visited by ships with dwt above 150k:
+
 <p align="center">
-<img  src="img/heavy_ports.png" width="600" height="300" >
+<img  src="img/heavy_port.png" width="600" height="300" >
 </p>
 
 
@@ -79,24 +80,47 @@ while the moving average gives a certain approximation, large spikes or dips wou
 do not seem to be of use here to deal with the fluctuations.
 
 
-### Graphs 
-#### Hierarchical Clustering of Ports  
+### Combining Graphs and Ship Movement Data  
 
-We construct a directed graph with ports as nodes and ship trajectories as edges 
-( it is better to use travelled distance instead of straight line distance). A clustering 
- 
- the goal being to identify 
+#### Graphs 
 
+We construct a directed graph with ports as nodes and ship trajectories ( above 150k dwt) as edges 
+( it is better to use travelled distance instead of straight line distance). 
 
+<p align="center">
+<img  src="img/port_graph.png" width="800" height="600" >
+</p>
 
-### Ship Movement Data 
+We are able to see the links between East Asia and Brazilian, South African and Australian ports. Using graph clustering methods 
+like the Louvain or Leiden algorithms, we can cluster ports based on how ships travelling between them. 
 
-While ship movement data (location, speed, heading, etc.) can give us more granularity, the relatively long 
+Within this graph community cluster, it would be possible to further cluster the ports geographically with algorithms like 
+k-means or DBScan. We can then obtain a 2 level hierarchical clustering based on ship itineraries and port locations. Thus, 
+knowing which port a ship departed from , it is possible to get a list of ports it is likely to visit. Used alone, it only relies on the
+last port visited and would provide many possible ports. 
+
+#### Ship Movement Data 
+
+When used alone, ship movement data (location, speed, heading, etc.) can give us more granularity. However the relatively long 
 forecast period increases uncertainty; 
 a ship could head to port A, then port B and then possibly port C within that time frame. 
 
-Some ports are also located close to each other, so a ship could be headed to any one of them. 
+Some ports are also located close to each other, so a ship could be headed to any one of them like Port Hedland and Dampier.
 
 <p float="center">
   <img src="img/oz.png" width="400" height="300" />
 </p>
+
+
+#### Combining the information
+
+We could plot historical ship movement data arcs for each of the hierarchical clusters that we created to create a probability density functions.
+Based on the port of departure and known travel times between the ports in the cluster, we can narrow down the list of ports that determine which geographical cluster of ports
+the ship is likeliest to visit based on it's last known position, speed and heading. 
+
+
+### Neural Networks 
+
+Deep neural networks could potentially learn the information that we are trying to synthesize by using graphs and ship movement data. 
+Of particular interest are CNN and Transformer architectures which performed well on a recent [Kaggle competition](https://www.kaggle.com/c/nfl-big-data-bowl-2020/overview)
+where initial player position, speed and other data was used to predict outcome of NFL run plays. 
