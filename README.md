@@ -1,6 +1,7 @@
 # Predicting Ship Loading at Port 
 
-Due to unfamiliarity with AWS, most of the processing was done using compute on Kaggle.  
+Due to unfamiliarity with AWS, most of the processing was done using compute on Kaggle. Refer to `master` branch for submission,
+`curiosity` branch is done out of interest. 
 
 ## Preprocessing
 
@@ -96,6 +97,16 @@ We construct a directed graph with ports as nodes and ship trajectories ( above 
 
 We are able to see the links between East Asia and Brazilian, South African and Australian ports. Using graph clustering methods 
 like the Louvain or Leiden algorithms, we can cluster ports based on how ships travelling between them. 
+
+Using the default Louvain clustering setting without weights, there are 8 port clusters. We can clearly see that although geographically close,
+Japanese and Chinese ports form separate clusters. Likewise for India, whereas Southeast Asia is connected to all three. Europe and North America
+form a separate cluster. 
+
+<p align="center">
+<img  src="img/port_color.png" width="600" height="350" >
+</p>
+
+
 
 Within this graph community cluster, it would be possible to further cluster the ports geographically with algorithms like 
 k-means or DBScan. We can then obtain a 2 level hierarchical clustering based on ship itineraries and port locations. Thus, 
