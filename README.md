@@ -98,12 +98,12 @@ We construct a directed graph with ports as nodes and ship trajectories ( above 
 We are able to see the links between East Asia and Brazilian, South African and Australian ports. Using graph clustering methods 
 like the Louvain or Leiden algorithms, we can cluster ports based on how ships travelling between them. 
 
-Using the default Louvain clustering setting without weights, there are 8 port clusters. We can clearly see that although geographically close,
+Using the default Louvain clustering setting with the weights set as the inverse of the travel time between ports, there are 13 port clusters. We can clearly see that although geographically close,
 Japanese and Chinese ports form separate clusters. Likewise for India, whereas Southeast Asia is connected to all three. Europe and North America
 form a separate cluster. 
 
 <p align="center">
-<img  src="img/port_color.png" width="600" height="350" >
+<img  src="img/port_graph2.png" width="800" height="600" >
 </p>
 
 
@@ -112,6 +112,8 @@ Within this graph community cluster, it would be possible to further cluster the
 k-means or DBScan. We can then obtain a 2 level hierarchical clustering based on ship itineraries and port locations. Thus, 
 knowing which port a ship departed from, it is possible to get a list of ports it is likely to visit. Used alone, it only relies on the
 last port visited and would provide many possible ports. 
+
+However it should be noted that ships can travel between graph clusters and not exclusively within it's cluster. 
 
 #### Ship Movement Data 
 
